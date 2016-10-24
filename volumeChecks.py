@@ -3,7 +3,6 @@
 # This script list all your running ec2instances and check the status of the volumes attached.
 
 from __future__ import print_function
-from sets import Set
 
 import boto3
 import json
