@@ -37,7 +37,7 @@ do
     sleep 30
 
     COUNT=$[$COUNT + 1]
-    if (("$COUNT" > "3")); then
+    if (("$COUNT" > "5")); then
        echo 'Timing out...'
        break
     fi
