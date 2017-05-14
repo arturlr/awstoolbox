@@ -1,0 +1,94 @@
+<powershell>
+
+# Things to do:
+# connect to the server and grant access to upcode_user to remote powershell
+# https://helpcenter.gsx.com/hc/en-us/articles/202447926-How-to-Configure-Windows-Remote-PowerShell-Access-for-Non-Privileged-User-Accounts
+#
+# Log with iis_svc in order to create a profile
+#
+# Copy and paste the AWS.EC2.Windows.CloudWatch.json file
+#
+# Sysprep the machine via EC2.Config.Services
+#
+
+$RetryCount = 0
+$hostname = hostname
+$global:TraceLog = ""
+
+if (!(Test-Path c:\temp)) { New-Item c:\temp -type directory }
+
+function AppendLog ([string]$Message)
+{
+   $global:TraceLog += ("[" + (Get-Date).ToString() +"]" + "`t" + $Message + "`r`n")
+   "[" + (Get-Date).ToString() +"]" + "`t" + $Message | Out-File -Append c:\temp\userdata.log
+}
+
+try {
+AppendLog "Script now executing on host [$hostname]. PowerShell version [$($PSVersionTable.PSVersion.ToString())]"
+
+AppendLog "IIS install - start"
+Import-Module -Name ServerManager
+Install-WindowsFeature Web-Server -IncludeAllSubFeature
+AppendLog "IIS install - finish"
+
+AppendLog "URL Rewrite - start"
+Invoke-RestMethod http://go.microsoft.com/fwlink/?LinkID=615137 -OutFile c:\temp\rewrite_amd64.msi
+c:\temp\rewrite_amd64.msi /quiet
+AppendLog "URL Rewrite - finish"
+
+AppendLog "WebDeploy - start"
+Invoke-RestMethod http://go.microsoft.com/fwlink/?LinkID=309497 -OutFile c:\temp\webdeploy_amd64_en-US.msi
+Do {
+   $RetryCount = $RetryCount + 1
+   if (!(Test-Path "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe")) {
+      Start-Sleep -Seconds 5
+      c:\temp\webdeploy_amd64_en-US.msi /quiet
+   }
+   else {
+      break;
+   }
+   If ($RetryCount -ge 5) {
+      throw "too many tries - WebDeploy Error"
+      break;
+   }
+}while ($true)
+AppendLog "WebDeploy - finish"
+
+# AppendLog "Configuring WinRm"
+# cmd /c "winrm set winrm/config/service/auth @{Basic=""true""}"
+# cmd /c "winrm set winrm/config/service @{AllowUnencrypted=""true""}"
+# Set-NetFirewallRule -Name "WINRM-HTTP-In-TCP-PUBLIC" -RemoteAddress Any
+
+AppendLog "Creating User"
+net user myadmin xxxxxxxx /add
+net user iis_svc xxxxxxxx /add
+net localgroup administrators myadmin /add
+
+AppendLog "Adding File Permission"
+$InheritanceFlag = [System.Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [System.Security.AccessControl.InheritanceFlags]::ObjectInherit
+$PropagationFlag = [System.Security.AccessControl.PropagationFlags]::None
+$objType = [System.Security.AccessControl.AccessControlType]::Allow
+$folder = "c:\inetpub\wwwroot"
+#
+$acl = (Get-Item $folder).GetAccessControl('Access')
+$permission1 = "iis_svc","Modify", $InheritanceFlag, $PropagationFlag, $objType
+$accessRule1 = New-Object System.Security.AccessControl.FileSystemAccessRule $permission1
+$acl.AddAccessRule($accessRule1)
+#
+$permission2 = "upcode_user","Modify", $InheritanceFlag, $PropagationFlag, $objType
+$accessRule2 = New-Object System.Security.AccessControl.FileSystemAccessRule $permission2
+$acl.AddAccessRule($accessRule2)
+set-acl $folder $acl
+
+AppendLog "SQL Management Studio - download and instalation"
+Invoke-RestMethod http://go.microsoft.com/fwlink/?LinkID=824938 -OutFile c:\temp\SSMS-Setup-ENU.exe
+c:\temp\SSMS-Setup-ENU.exe /quiet
+
+}
+catch
+{
+   AppendLog "Error - $($Error[0].Exception.Message)"
+   Publish-SNSMessage -TopicArn "arn:aws:sns:us-east-1:0000000000:TopicName" -Message $global:TraceLog -Subject "WebProv Error"
+}
+</powershell>
+

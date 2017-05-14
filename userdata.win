@@ -1,0 +1,79 @@
+<powershell>
+$ZipPath = "c:\temp\phourspkg.zip"
+$destination = "c:\temp\pkg"
+$RetryCount = 0
+#$hostname = Invoke-RestMethod http://169.254.169.254/latest/meta-data/public-hostname
+$hostname = hostname
+$global:TraceLog = ""
+
+if (!(Test-Path c:\temp)) { New-Item c:\temp -type directory }
+if (!(Test-Path c:\temp\pkg)) { New-Item c:\temp\pkg -type directory }
+
+function AppendLog ([string]$Message)
+{
+   $global:TraceLog += ("[" + (Get-Date).ToString() +"]" + "`t" + $Message + "`r`n")
+   "[" + (Get-Date).ToString() +"]" + "`t" + $Message | Out-File -Append c:\temp\userdata.log
+}
+
+try {
+AppendLog "Script now executing on host [$hostname]. PowerShell version [$($PSVersionTable.PSVersion.ToString())]"
+
+AppendLog "Certificate creation and install - start"
+Import-Module WebAdministration
+New-SelfSignedCertificate -DnsName "$hostname" -CertStoreLocation "cert:\LocalMachine\My"
+Push-Location IIS:\SslBindings
+New-WebBinding -Name "Default Web Site" -IP "*" -Port 443 -Protocol https
+$c = Get-ChildItem -Path cert:\LocalMachine\my | Where-Object {$_.subject -eq "CN=$hostname"} | Select-Object -first 1
+$cert = $c.thumbprint.tostring()
+Get-Item cert:\LocalMachine\MY\$cert | new-item 0.0.0.0!443
+Pop-Location
+AppendLog "Certificate creation and install - finish"
+
+AppendLog "Creating index.html for health check"
+Get-CimInstance Win32_OperatingSystem | Select-Object  Caption, InstallDate, ServicePackMajorVersion, OSArchitecture, BootDevice,  BuildNumber, CSName | ConvertTo-Html -Title "Windows Services: Server01" -Body $_ >> c:\inetpub\wwwroot\index.html
+
+AppendLog "Tweaking DefaultAppPool - start"
+$newpass = Invoke-RestMethod http://169.254.169.254/latest/meta-data/reservation-id
+$newpass = $newpass + "!"
+net user iis_svc $newpass
+
+$dfpool = get-item iis:\apppools\DefaultAppPool
+$dfpool.ProcessModel.userName = "iis_svc"
+$dfpool.ProcessModel.password = $newpass
+$dfpool.ProcessModel.identitytype = 3
+$dfpool | set-item
+if ($dfpool.state -eq "Stopped") {
+   $dfpool.start();
+}
+else {
+   $dfpool.stop();
+   $count = 0
+   do {
+      start-sleep 3
+      $count++
+      if ($count -ge 15) {
+         throw "too many tries - App restart"
+         break;
+      }
+   } while ($dfpool.state -ne "Stopped")
+   $dfpool.start();
+}
+AppendLog "Tweaking DefaultAppPool - finish"
+
+AppendLog "Cleaning"
+cd \
+Remove-Item c:\temp\pkg -recurse
+Remove-Item c:\temp\*.zip
+Remove-Item c:\temp\*.exe
+
+$message = "[" + (Get-Date).ToString() +"]" + "`t" + "New Server: $hostname"
+Publish-SNSMessage -TopicArn "arn:aws:sns:us-east-1:000000000000:Topic" -Message $message
+Publish-SNSMessage -TopicArn "arn:aws:sns:us-east-1:000000000000:Topic2" -Message $global:TraceLog -Subject "WebProv Success"
+}
+catch
+{
+   AppendLog "Error - $($Error[0].Exception.Message)"
+   Publish-SNSMessage -TopicArn "arn:aws:sns:us-east-1:000000000000:Topic2" -Message $global:TraceLog -Subject "WebProv Error"
+}
+</powershell>
+

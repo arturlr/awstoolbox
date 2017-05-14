@@ -1,0 +1,91 @@
+{
+    "EngineConfiguration": {
+        "PollInterval": "00:00:15",
+        "Components": [
+            {
+                "Id": "ApplicationEventLog",
+                "FullName": "AWS.EC2.Windows.CloudWatch.EventLog.EventLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                "Parameters": {
+                    "LogName": "Application",
+                    "Levels": "3"
+                }
+            },
+            {
+                "Id": "SystemEventLog",
+                "FullName": "AWS.EC2.Windows.CloudWatch.EventLog.EventLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                "Parameters": {
+                    "LogName": "System",
+                    "Levels": "3"
+                }
+            },
+            {
+                "Id": "IISLogs",
+                "FullName": "AWS.EC2.Windows.CloudWatch.CustomLog.CustomLogInputComponent,AWS.EC2.Windows.CloudWatch",
+                "Parameters": {
+                    "LogDirectoryPath": "C:\\inetpub\\logs\\LogFiles\\W3SVC1",
+                    "TimestampFormat": "yyyy-MM-dd HH:mm:ss",
+                    "Encoding": "UTF-8",
+                    "Filter": "",
+                    "CultureName": "en-US",
+                    "TimeZoneKind": "UTC",
+                    "LineCount": "3"
+                }
+            },
+            {
+                "Id": "PerformanceCounter",
+                "FullName": "AWS.EC2.Windows.CloudWatch.PerformanceCounterComponent.PerformanceCounterInputComponent,AWS.EC2.Windows.CloudWatch",
+                "Parameters": {
+                    "CategoryName": "Memory",
+                    "CounterName": "Available MBytes",
+                    "InstanceName": "",
+                    "MetricName": "Memory",
+                    "Unit": "Megabytes",
+                    "DimensionName": "instanceid",
+                    "DimensionValue": ""
+                }
+            },
+            {
+                "Id": "CloudWatchLogs",
+                "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
+                "Parameters": {
+                    "AccessKey": "",
+                    "SecretKey": "",
+                    "Region": "us-east-1",
+                    "LogGroup": "Windows-EvtLogs",
+                    "LogStream": "{instance_id}"
+                }
+            },
+	    {
+                "Id": "CloudWatchIISLogs",
+                "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatchLogsOutput,AWS.EC2.Windows.CloudWatch",
+                "Parameters": {
+                    "AccessKey": "",
+                    "SecretKey": "",
+                    "Region": "us-east-1",
+                    "LogGroup": "IIS-Logs",
+                    "LogStream": "{instance_id}"
+                }
+            },
+            {
+                "Id": "CloudWatch",
+                "FullName": "AWS.EC2.Windows.CloudWatch.CloudWatch.CloudWatchOutputComponent,AWS.EC2.Windows.CloudWatch",
+                "Parameters":
+                {
+                    "AccessKey": "",
+                    "SecretKey": "",
+                    "Region": "us-east-1",
+                    "NameSpace": "PerformanceMonitor"
+                }
+            }
+        ],
+        "Flows": {
+            "Flows":
+            [
+                "(ApplicationEventLog,SystemEventLog),CloudWatchLogs",
+         	"IISLogs,CloudWatchIISLogs",
+                "PerformanceCounter,CloudWatch"
+            ]
+        }
+    }
+}
+
