@@ -31,6 +31,17 @@ if [[ -f "${TEMPDEPLOY}"/code.zip ]]; then
    rm "${TEMPDEPLOY}"/code.zip
 fi
 
+## instaling Custom Libraries from codecommit
+if [[ -f "${TEMPDEPLOY}"/dependencies.txt ]]; then
+   printf "Adding custom libraries\n"
+   while read -r line; do
+      cd "${TEMPDEPLOY}"
+      git clone "ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/${line}"
+      mkdir "${TEMPDEPLOY}/lib/python2.7/site-packages/${line}"
+      cp "${TEMPDEPLOY}/${line}"/* "${TEMPDEPLOY}/lib/python2.7/site-packages/${line}"
+   done < "${TEMPDEPLOY}"/dependencies.txt
+fi
+
 ## Instaling Packages
 print "Installing Packages\n"
 "${TEMPDEPLOY}"/bin/pip install pip -U
