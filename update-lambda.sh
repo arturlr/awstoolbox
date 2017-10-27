@@ -11,8 +11,8 @@ git clone ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/$1
 
 read curdir <<< $(pwd)
 DATESUFFIX=$(date +%Y-%b-%d-%H%M)
-BUCKET=phours
-PREFIX=lambda
+BUCKET=xxxx
+PREFIX=xxxx
 TEMPDEPLOY="${curdir}"/tempDeploy
 
 printf "Creating the temp VirtualEnv\n"
