@@ -32,7 +32,7 @@ if [[ -f "${TEMPDEPLOY}"/code.zip ]]; then
 fi
 
 ## instaling Custom Libraries from codecommit
-if [[ -f "${TEMPDEPLOY}"/dependencies.txt ]]; then
+if [[ -f "${TEMPDEPLOY}"/gitrepos.txt ]]; then
    printf "Adding custom libraries\n"
    while read -r line; do
       cd "${TEMPDEPLOY}"
