@@ -19,41 +19,9 @@
           "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))",
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco feature enable -n allowGlobalConfirmation"
-        ]
-      }
-    },
-    {
-      "precondition": {
-        "StringEquals": [
-          "platformType",
-          "Windows"
-        ]
-      },
-      "action": "aws:runPowerShellScript",
-      "name": "InstallAwsCliAndPowershell",
-      "inputs": {
-        "id": "1.aws:runPowerShellScript",
-        "timeoutSeconds": 600,
-        "runCommand": [
           "Write-Host \"Installing AWS CLI and Powershell\"", 
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco install awscli awstools.powershell"
-        ]
-      }
-    },
-    {
-      "precondition": {
-        "StringEquals": [
-          "platformType",
-          "Windows"
-        ]
-      },
-      "action": "aws:runPowerShellScript",
-      "name": "InstallVS2019CommunityAndDotNetCore",
-      "inputs": {
-        "id": "2.aws:runPowerShellScript",
-        "timeoutSeconds": 600,
-        "runCommand": [
           "Write-Host \"Installing VS2019 and DotNetCore\"", 
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco install visualstudio2019community visualstudio2019-workload-netcoretools"
