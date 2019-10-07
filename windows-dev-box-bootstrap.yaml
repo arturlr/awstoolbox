@@ -1,15 +1,6 @@
 {
   "schemaVersion": "2.2",
   "description": "Install all the required packages for a Windows Dev Box",
-  "parameters": {
-    "Operation": {
-      "type": "String",
-      "description": "(Required) The AWS Agent related action to perform. The install operation installs the AWS Agent on the System",
-      "allowedValues": [
-        "Install"
-      ]
-    }
-  },
   "mainSteps": [
     {
       "precondition": {
