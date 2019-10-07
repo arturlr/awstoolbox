@@ -80,7 +80,7 @@
         "id": "3.aws:runPowerShellScript",
         "timeoutSeconds": 600,
         "runCommand": [
-          "Write-Host \"Downloading AWS Toolkit for Visual Studio/"",
+          "Write-Host \"Downloading AWS Toolkit for Visual Studio\"",
           "$vsixUri = 'https://amazonwebservices.gallerycdn.vsassets.io/extensions/amazonwebservices/awstoolkitforvisualstudio2017/1.15.2.1/1562099943790/AWSToolkitPackage.vsix'",
           "$installer = \"${!env:ProgramFiles(x86)}\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\VSIXInstaller.exe\"",
           "$devEnvVersion = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(\"${!env:ProgramFiles(x86)}\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv.exe\")",
@@ -97,6 +97,26 @@
           "$Shortcut.TargetPath = $TargetFile",
           "$Shortcut.Description = \"Visual Studio 2019 Community Edition\"",
           "$Shortcut.Save()"
+        ]
+      }
+    },
+    {
+      "precondition": {
+        "StringEquals": [
+          "platformType",
+          "Windows"
+        ]
+      },
+      "action": "aws:runPowerShellScript",
+      "name": "InstallVS2019CommunityAndDotNetCore",
+      "inputs": {
+        "id": "4.aws:runPowerShellScript",
+        "timeoutSeconds": 600,
+        "runCommand": [
+          "Write-Host \"Downloading AWS SAM\"",
+          "mkdir c:\\temp\\",
+          "Invoke-RestMethod https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi -OutFile c:\\temp\\AWS_SAM_CLI_64_PY3.msi",
+          "c:\\temp\\AWS_SAM_CLI_64_PY3.msi /quiet"
         ]
       }
     }
