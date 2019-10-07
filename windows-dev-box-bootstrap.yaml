@@ -18,10 +18,10 @@
           "Write-Host \"Installing Choclatey\"",
           "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))",
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
-          "choco feature enable -n allowGlobalConfirmation"
+          "choco feature enable -n allowGlobalConfirmation",
           "Write-Host \"Installing AWS CLI and Powershell\"", 
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
-          "choco install awscli awstools.powershell"
+          "choco install awscli awstools.powershell",
           "Write-Host \"Installing VS2019 and DotNetCore\"", 
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco install visualstudio2019community visualstudio2019-workload-netcoretools"
