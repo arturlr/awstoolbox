@@ -9,10 +9,10 @@
           "Windows"
         ]
       },
-      "action": "aws:runShellScript",
+      "action": "aws:runPowerShellScript",
       "name": "InstallChocolatey",
       "inputs": {
-        "id": "0.aws:runShellScript",
+        "id": "0.aws:runPowerShellScript",
         "timeoutSeconds": 600,
         "runCommand": [
           "Write-Host \"Installing Choclatey\"",
