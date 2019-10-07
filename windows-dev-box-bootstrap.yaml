@@ -36,6 +36,7 @@
         "timeoutSeconds": 600,
         "runCommand": [
           "Write-Host \"Installing AWS CLI and Powershell\"", 
+          "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco install awscli awstools.powershell"
         ]
       }
@@ -54,6 +55,7 @@
         "timeoutSeconds": 600,
         "runCommand": [
           "Write-Host \"Installing VS2019 and DotNetCore\"", 
+          "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco install visualstudio2019community visualstudio2019-workload-netcoretools"
         ]
       }
