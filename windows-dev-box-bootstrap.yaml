@@ -13,7 +13,7 @@
       "name": "InstallChocolatey",
       "inputs": {
         "id": "0.aws:runPowerShellScript",
-        "timeoutSeconds": 900,
+        "timeoutSeconds": 1800,
         "runCommand": [
           "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))",
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
