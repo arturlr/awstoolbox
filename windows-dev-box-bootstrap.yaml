@@ -13,73 +13,26 @@
       "name": "InstallChocolatey",
       "inputs": {
         "id": "0.aws:runPowerShellScript",
-        "timeoutSeconds": 600,
+        "timeoutSeconds": 900,
         "runCommand": [
-          "Write-Host \"Installing Choclatey\"",
           "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))",
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco feature enable -n allowGlobalConfirmation",
-          "Write-Host \"Installing AWS CLI and Powershell\"", 
-          "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco install awscli awstools.powershell",
-          "Write-Host \"Installing VS2019 and DotNetCore\"", 
-          "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco install visualstudio2019community visualstudio2019-workload-netcoretools"
         ]
       }
     },
-    {
-      "precondition": {
-        "StringEquals": [
-          "platformType",
-          "Windows"
-        ]
-      },
-      "action": "aws:runPowerShellScript",
-      "name": "InstallVS2019CommunityAndDotNetCore",
-      "inputs": {
-        "id": "3.aws:runPowerShellScript",
-        "timeoutSeconds": 600,
-        "runCommand": [
-          "Write-Host \"Downloading AWS Toolkit for Visual Studio\"",
-          "$vsixUri = 'https://amazonwebservices.gallerycdn.vsassets.io/extensions/amazonwebservices/awstoolkitforvisualstudio2017/1.15.2.1/1562099943790/AWSToolkitPackage.vsix'",
-          "$installer = \"${!env:ProgramFiles(x86)}\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\VSIXInstaller.exe\"",
-          "$devEnvVersion = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(\"${!env:ProgramFiles(x86)}\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv.exe\")",
-          "$skuVersion = \"{0}.{1}\" -f $devEnvVersion.ProductMajorPart,$devEnvVersion.ProductMinorPart",
-          "$download= \"$env:temp\\AmazonWebServices.AWSToolkitforVisualStudio2017.vsix\"",
-          "Invoke-WebRequest -Uri \"$vsixUri\" -OutFile \"$download\"",
-          "Write-Host \"Installing AWS Toolkit for Visual Studio\"",
-          "Start-Process -Wait $installer -ArgumentList '/skuName:Community',\"/skuVersion:$skuVersion\",$download,'/q'",
-          "# Create a Shortcut with Windows PowerShell",
-          "$TargetFile = \"${!env:ProgramFiles(x86)}\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv.exe\"",
-          "$ShortcutFile = \"$env:Public\\Desktop\\Visual Studio 2019.lnk\"",
-          "$WScriptShell = New-Object -ComObject WScript.Shell",
-          "$Shortcut = $WScriptShell.CreateShortcut($ShortcutFile)",
-          "$Shortcut.TargetPath = $TargetFile",
-          "$Shortcut.Description = \"Visual Studio 2019 Community Edition\"",
-          "$Shortcut.Save()"
-        ]
-      }
-    },
-    {
-      "precondition": {
-        "StringEquals": [
-          "platformType",
-          "Windows"
-        ]
-      },
-      "action": "aws:runPowerShellScript",
-      "name": "InstallVS2019CommunityAndDotNetCore",
-      "inputs": {
-        "id": "4.aws:runPowerShellScript",
-        "timeoutSeconds": 600,
-        "runCommand": [
-          "Write-Host \"Downloading AWS SAM\"",
-          "mkdir c:\\temp\\",
-          "Invoke-RestMethod https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi -OutFile c:\\temp\\AWS_SAM_CLI_64_PY3.msi",
-          "c:\\temp\\AWS_SAM_CLI_64_PY3.msi /quiet"
-        ]
-      }
+  ],
+  "runtimeConfig": {
+      "action": "aws:applications",
+      "name": "Install SAM",
+      "properties":[
+            {
+                "id": "1.aws:applications",
+                "action": "Install",
+                "source": "https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi"        
+            }
+      ]
     }
-  ]
 }
