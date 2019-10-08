@@ -26,15 +26,6 @@
           "Start-Process -Wait msiexec.exe -ArgumentList /I \"{$env:TEMP}AWS_SAM_CLI_64_PY3.msi\" /quiet"
         ]
       }
-    },
-    {
-      "action": "aws:applications",
-      "name": "Install SAM",
-      "inputs": {
-         "id": "1.aws:applications",
-         "action": "Install",
-         "source": "https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi"        
-       }
     }
   ]
 }
