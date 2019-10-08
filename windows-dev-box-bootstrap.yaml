@@ -23,16 +23,14 @@
         ]
       }
     },
-  ],
-  "runtimeConfig": {
+    {
       "action": "aws:applications",
       "name": "Install SAM",
-      "properties":[
-            {
-                "id": "1.aws:applications",
-                "action": "Install",
-                "source": "https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi"        
-            }
-      ]
+      "inputs": {
+         "id": "1.aws:applications",
+         "action": "Install",
+         "source": "https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi"        
+       }
     }
+  ]
 }
