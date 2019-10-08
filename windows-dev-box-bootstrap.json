@@ -22,8 +22,8 @@
           "choco install visualstudio2019community visualstudio2019-workload-netcoretools",
           "choco install docker",
           "Write-Verbose \"choco Done!\"",
-          "Invoke-RestMethod https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi -OutFile \"{$env:TEMP}AWS_SAM_CLI_64_PY3.msi\"",
-          "Start-Process -Wait msiexec.exe -ArgumentList /I \"{$env:TEMP}AWS_SAM_CLI_64_PY3.msi\" /quiet"
+          "Invoke-RestMethod https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi -OutFile $env:TEMP\\AWS_SAM_CLI_64_PY3.msi",
+          "Start-Process -Wait msiexec.exe -ArgumentList /I $env:TEMP\\AWS_SAM_CLI_64_PY3.msi /quiet"
         ]
       }
     }
