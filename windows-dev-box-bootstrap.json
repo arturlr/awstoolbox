@@ -23,8 +23,8 @@
           "choco upgrade powershell-core",
           "choco install docker",
           "Invoke-RestMethod https://download.visualstudio.microsoft.com/download/pr/29f92590-ac92-45f0-99e8-e60c767dc4e9/ddc1014a788613364b5308d6c49db3db/dotnet-sdk-2.1.801-win-x64.exe -OutFile $env:TEMP/dotnetcore212.exe",
-          "Start-Process -Wait $env:TEMP\dotnetcore212.exe -ArgumentList '/install','/quiet'",
-          "Invoke-RestMethod 'https://github-production-resamlease-asset-2e65be.s3.amazonaws.com/92205085/e5b7c700-da0c-11e9-8da9-292491d0ef62?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20191008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20191008T225504Z&X-Amz-Expires=300&X-Amz-Signature=72a70f56257116616e2585e65c14fd1144bef7d68230b28afdfc6137baaa7c2b&X-Amz-SignedHeaders=host&actor_id=11309240&response-content-disposition=attachment%3B%20filename%3DAWS_SAM_CLI_64_PY3.msi&response-content-type=application%2Foctet-stream' -OutFile $env:TEMP/AWS_SAM_CLI_64_PY3.msi",
+          "Start-Process -Wait $env:TEMP\\dotnetcore212.exe -ArgumentList '/install','/quiet'",
+          "Invoke-RestMethod 'https://github-production-resamlease-asset-2e65be.s3.amazonaws.com/92205085/e5b7c700-da0c-11e9-8da9-292491d0ef62?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20191008%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20191008T225504Z&X-Amz-Expires=300&X-Amz-Signature=72a70f56257116616e2585e65c14fd1144bef7d68230b28afdfc6137baaa7c2b&X-Amz-SignedHeaders=host&actor_id=11309240&response-content-disposition=attachment%3B%20filename%3DAWS_SAM_CLI_64_PY3.msi&response-content-type=application%2Foctet-stream' -OutFile $env:TEMP//AWS_SAM_CLI_64_PY3.msi",
           "Start-Process -Wait msiexec.exe -ArgumentList /I,$env:TEMP\\AWS_SAM_CLI_64_PY3.msi,/quiet"
         ]
       }
