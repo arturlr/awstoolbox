@@ -20,10 +20,6 @@
           "choco feature enable -n allowGlobalConfirmation",
           "choco install awscli",
           "choco install vscode",
-          "code --install-extension ms-vscode.csharp",
-          "code --install-extension oderwat.indent-rainbow",
-          "code --install-extension amazonwebservices",
-          "code --install-extension eriklynd.json-tools",
           "choco install aws-sdk-net",
           "choco install wget",
           "choco upgrade powershell-core",
@@ -31,7 +27,7 @@
           "wget https://download.visualstudio.microsoft.com/download/pr/29f92590-ac92-45f0-99e8-e60c767dc4e9/ddc1014a788613364b5308d6c49db3db/dotnet-sdk-2.1.801-win-x64.exe -O $env:TEMP//dotnetcore212.exe",
           "Start-Process -Wait $env:TEMP\\dotnetcore212.exe -ArgumentList '/install','/quiet'",
           "wget https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi -O $env:TEMP\\AWS_SAM_CLI_64_PY3.msi",
-          "Start-Process -Wait msiexec.exe -ArgumentList /I,$env:TEMP\\AWS_SAM_CLI_64_PY3.msi,/quiet"          
+          "Start-Process -Wait msiexec.exe -ArgumentList /I,$env:TEMP\\AWS_SAM_CLI_64_PY3.msi,/quiet"
         ]
       }
     }
