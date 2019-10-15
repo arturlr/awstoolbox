@@ -18,7 +18,6 @@
           "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))",
           "Import-Module \"$env:ChocolateyInstall\\helpers\\chocolateyInstaller.psm1\"",
           "choco feature enable -n allowGlobalConfirmation",
-          "choco install awscli",
           "choco install vscode",
           "choco install aws-sdk-net",
           "choco install wget",
@@ -27,6 +26,8 @@
           "New-Item -Path c:\\ -Name ssmtemp -ItemType directory",
           "wget https://download.visualstudio.microsoft.com/download/pr/29f92590-ac92-45f0-99e8-e60c767dc4e9/ddc1014a788613364b5308d6c49db3db/dotnet-sdk-2.1.801-win-x64.exe -O c:\\ssmtemp\\dotnetcore212.exe",
           "Start-Process -Wait c:\\ssmtemp\\dotnetcore212.exe -ArgumentList '/install','/quiet'",
+          "wget https://github.com/awslabs/aws-sam-cli/releases/latest/download/https://s3.amazonaws.com/aws-cli/AWSCLI64PY3.msi -O c:\\ssmtemp\\AWSCLI64PY3.msi",
+          "Start-Process -Wait msiexec.exe -ArgumentList /I,$env:c:\\ssmtemp\\AWSCLI64PY3.msi,/quiet"
           "wget https://github.com/awslabs/aws-sam-cli/releases/latest/download/AWS_SAM_CLI_64_PY3.msi -O c:\\ssmtemp\\AWS_SAM_CLI_64_PY3.msi",
           "Start-Process -Wait msiexec.exe -ArgumentList /I,$env:c:\\ssmtemp\\AWS_SAM_CLI_64_PY3.msi,/quiet"
         ]
