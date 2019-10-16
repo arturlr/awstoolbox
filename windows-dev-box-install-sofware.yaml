@@ -6,7 +6,7 @@ mainSteps:
         - platformType
         - Windows
     action: aws:runPowerShellScript
-    name: InstallChocolatey
+    name: installSofware
     inputs:
       id: '0.aws:runPowerShellScript'
       timeoutSeconds: 1800
