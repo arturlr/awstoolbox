@@ -1,0 +1,26 @@
+schemaVersion: '2.2'
+description: Install all the required packages for a Windows Dev Box
+mainSteps:
+  - precondition:
+      StringEquals:
+        - platformType
+        - Windows
+    action: aws:runPowerShellScript
+    name: InstallChocolatey
+    inputs:
+      id: '0.aws:runPowerShellScript'
+      timeoutSeconds: 1800
+      runCommand:
+        - New-Item -Path c:\ -Name ssmtemp -ItemType directory
+        - iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+        - Import-Module $env:ChocolateyInstall\helpers\chocolateyInstaller.psm1
+        - choco feature enable -n allowGlobalConfirmation
+        - choco install wget
+        - choco upgrade powershell-core
+        - choco install vscode
+        - wget https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe -O C:\ssmtemp\python37.exe
+        - Start-Process -Wait c:\ssmtemp\python37.exe -ArgumentList '/quiet','InstallAllUsers=1','TargetDir=c:\python3.7','PrependPath=1'
+        - wget https://download.visualstudio.microsoft.com/download/pr/29f92590-ac92-45f0-99e8-e60c767dc4e9/ddc1014a788613364b5308d6c49db3db/dotnet-sdk-2.1.801-win-x64.exe
+          -O c:\ssmtemp\dotnetcore212.exe
+        - Start-Process -Wait c:\ssmtemp\dotnetcore212.exe -ArgumentList '/quiet'
+        - Restart-Computer
