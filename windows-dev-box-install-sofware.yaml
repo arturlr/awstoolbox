@@ -13,7 +13,7 @@ mainSteps:
       runCommand:
         - New-Item -Path c:\ -Name ssmtemp -ItemType directory
         - iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-        - Import-Module $env:ChocolateyInstall\helpers\chocolateyInstaller.psm1
+        - Import-Module "$env:ChocolateyInstall\helpers\chocolateyInstaller.psm1"
         - choco feature enable -n allowGlobalConfirmation
         - choco install wget
         - choco upgrade powershell-core
