@@ -1,0 +1,18 @@
+schemaVersion: '2.2'
+description: Install all the required packages for a Windows Dev Box
+mainSteps:
+  - precondition:
+      StringEquals:
+        - platformType
+        - Windows
+    action: aws:runPowerShellScript
+    name: configSofware
+    inputs:
+      id: '0.aws:runPowerShellScript'
+      timeoutSeconds: 1800
+      runCommand:
+        - python -m pip install --upgrade pip     
+        - pip install awscli
+        - pip install aws-sam-cli
+        - dotnet tool install -g Amazon.Lambda.Tools
+        - dotnet new -i Amazon.Lambda.Templates
