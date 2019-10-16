@@ -19,10 +19,10 @@ mainSteps:
         - choco upgrade powershell-core
         - choco install vscode
         - Write-Host "Getting/Installing Python"
-        - wget https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe -O C:\ssmtemp\python37.exe
-        - Start-Process -Wait c:\ssmtemp\python37.exe -ArgumentList '/quiet','InstallAllUsers=1','TargetDir=c:\python3.7','PrependPath=1'
+        - wget --show-progress https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe -O C:\ssmtemp\python37.exe
+        - Start-Process -Wait c:\ssmtemp\python37.exe -ArgumentList '/passive','InstallAllUsers=1','TargetDir=c:\python3.7','PrependPath=1'
         - Write-Host "Getting/Installing dotnet"
-        - wget https://download.visualstudio.microsoft.com/download/pr/29f92590-ac92-45f0-99e8-e60c767dc4e9/ddc1014a788613364b5308d6c49db3db/dotnet-sdk-2.1.801-win-x64.exe -O c:\ssmtemp\dotnetcore212.exe
+        - wget --show-progress https://download.visualstudio.microsoft.com/download/pr/29f92590-ac92-45f0-99e8-e60c767dc4e9/ddc1014a788613364b5308d6c49db3db/dotnet-sdk-2.1.801-win-x64.exe -O c:\ssmtemp\dotnetcore212.exe
         - Start-Process -Wait c:\ssmtemp\dotnetcore212.exe -ArgumentList '/quiet'
         - Write-Host "Restart"
         - Restart-Computer -Force
