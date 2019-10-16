@@ -6,7 +6,7 @@ mainSteps:
         - platformType
         - Windows
     action: aws:runPowerShellScript
-    name: configSofware
+    name: configSoftware
     inputs:
       id: '0.aws:runPowerShellScript'
       timeoutSeconds: 1800
