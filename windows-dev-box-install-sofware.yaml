@@ -25,4 +25,4 @@ mainSteps:
         - wget https://download.visualstudio.microsoft.com/download/pr/29f92590-ac92-45f0-99e8-e60c767dc4e9/ddc1014a788613364b5308d6c49db3db/dotnet-sdk-2.1.801-win-x64.exe -O c:\ssmtemp\dotnetcore212.exe
         - Start-Process -Wait c:\ssmtemp\dotnetcore212.exe -ArgumentList '/quiet'
         - Write-Host "Restart"
-        - Restart-Computer
+        - Restart-Computer -Force
