@@ -32,8 +32,5 @@ chmod +x ./dotnet-install.sh
 ./dotnet-install.sh --channel 3.1
 
 # Visual Studio (Amazon Linux)
-sudo yum install -y libXScrnSaver gtk3
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-sudo yum install -y code
+# https://aws.plainenglish.io/how-to-run-an-instance-of-visual-studio-code-over-your-network-with-aws-ec2-d9fc6034c091
 
