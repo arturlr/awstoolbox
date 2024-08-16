@@ -29,6 +29,10 @@ export PATH="$PATH:/opt/homebrew/opt/ruby/bin"
 export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 
+## dotnet
+export DOTNET_ROOT=$HOME/.dotnet
+export PATH=$PATH:$DOTNET_ROOT
+
 #### ALIASES ##################################################################
 alias fd='find . -type d | sort'
 alias ff='find . -type f | sort'
